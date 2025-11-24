@@ -62,12 +62,15 @@ app.use((req, res, next) => {
   } else {
     serveStatic(app);
   }
-  const port = parseInt(process.env.PORT || '5000', 10);
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
+  const port = parseInt(process.env.PORT || '5173', 10);
+  server.listen(port, "0.0.0.0", () => {
     log(`serving on port ${port}`);
+  }).on('error', (err: NodeJS.ErrnoException) => {
+    if (err.code === 'EADDRINUSE') {
+      log(`Port ${port} is already in use. Please use a different port or set the PORT environment variable.`);
+      process.exit(1);
+    } else {
+      throw err;
+    }
   });
 })();
