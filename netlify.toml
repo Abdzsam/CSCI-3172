@@ -1,0 +1,18 @@
+[build]
+  command = "vite build"
+  publish = "dist/public"
+
+[functions]
+  directory = "netlify/functions"
+
+[dev]
+  command = "vite --port 5173"
+  targetPort = 5173
+  framework = "#custom"
+
+# SPA redirect - handle client-side routing
+# Note: This must come after API routes (which are handled by functions via path config)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
